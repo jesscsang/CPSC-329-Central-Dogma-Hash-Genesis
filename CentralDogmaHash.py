@@ -2,15 +2,47 @@
 def stringToBin(string):
     resultBin = ""
     for char in string:
-        resultBin += bin(ord(char))[2:]
+        # print(f'char: {char} bin: {bin(ord(char))} cut: {bin(ord(char))[2:]}')
+        """
+        Add zero or not?:
+            ASCII is a 7-bit code but when it is stored as a byte the MSB is 0
+        """
+        resultBin += "0" + bin(ord(char))[2:]
     return resultBin
 
+
+def sumASCII(string):
+    resultASCII = 0
+    for char in string:
+        resultASCII += ord(char)
+    return resultASCII
 
 def strToASCII(string):
     resultASCII = ""
     for char in string:
         resultASCII += str(ord(char)) + " "
     return resultASCII
+
+def rotateCircularArray(string,shift,direction="fwd"):
+    """
+    rotateCircularArray("apple",0) -> apple
+    rotateCircularArray("apple",1) -> eappl
+    rotateCircularArray("apple",2) -> leapp
+    rotateCircularArray("apple",3) -> pleap
+    """
+    shiftedString=""
+    length = len(string)
+    shiftBy = shift % length
+
+    if direction == "bwd":
+        newStartIndex = shiftBy
+    else:
+        newStartIndex = length - shiftBy
+
+    for i in range(length):
+        newIndex = (newStartIndex + i) % length
+        shiftedString += string[newIndex]
+    return shiftedString
 
 
 def binToDNA(bin):
@@ -78,7 +110,6 @@ def RNA2aminoAcids(RNA):
         "UAA": "", "UAG": "", "UGA": ""
     }
 
-    print(RNA)
     for i in range(0, len(RNA)-2, 3):
         rnaCodon = RNA[i]+RNA[i+1]+RNA[i+2]
         for key in RNA_Codons:
@@ -108,35 +139,42 @@ def formatChar(string, groupsOf):
     return result
 
 
-def CentralDogmaHash(string):
-    return RNA2aminoAcids(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(string))[::-1]))+'0')).replace('T', 'U'))
+def CentralDogmaHash(password, salt =""):
+    implicitSalt = sumASCII(password)
+    saltedPassword = salt + str(implicitSalt) + password
+    print(saltedPassword)
+    return RNA2aminoAcids(compStrand(binToDNA(DNA2bin(compStrand(binToDNA(rotateCircularArray(stringToBin(password),implicitSalt))[::-1])))).replace('T', 'U'))
 
 
-password = "Hello World"
+password = "password"
 print(CentralDogmaHash(password))
 
-# binaryPW = stringToBin(password)
-# binModify = "0" + binaryPW + "0"
+implicitSalt = sumASCII(password)
+saltedPassword = str(implicitSalt) + password
+
+"""RNA2aminoAcids(compStrand(binToDNA(DNA2bin(compStrand(binToDNA(rotateCircularArray(
+    stringToBin(password),implicitSalt))[::-1])))).replace('T', 'U'))"""
 
 
-# print(f"0. Password: \n\t {password}")
-# print(f"1. Password => ASCII: \n\t {strToASCII(password)}")
-# print(f"2. ASCII => Binary: \n\t {formatChar(stringToBin(password),8)}")
-# print(
-#     f"3. Binary => DNA Coding Strand: \n\t 3'-{formatChar(binToDNA(binaryPW),10)}-5'")
-# print(
-#     f"4. Reverse DNA Coding Strand: \n\t 5'-{formatChar(binToDNA(binaryPW)[::-1],10)}-3'")
-# print(
-#     f"5. DNA Coding Strand => DNA Template Strand: \n\t 3'-{formatChar(compStrand(binToDNA(binaryPW)[::-1]),10)}-5'")
-# print(
-#     f"6. DNA Template Strand => Binary: \n\t {formatChar(DNA2bin(compStrand(binToDNA(binaryPW)[::-1])),10)}")
-# print(
-#     f"7. Add Zeros to Both Ends: \n\t {formatChar('0'+DNA2bin(compStrand(binToDNA(binaryPW)[::-1]))+'0',10)}")
-# print(
-#     f"8. Binary => DNA Template Strand: \n\t 3'-{formatChar(binToDNA('0'+DNA2bin(compStrand(binToDNA(binaryPW)[::-1]))+'0'),10)}-5'")
-# print(
-#     f"9. DNA Template Strand => DNA Coding Strand: \n\t 5'-{formatChar(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(binaryPW)[::-1]))+'0')),10)}-3'")
-# print(
-#     f"10. DNA Coding Strand => mRNA: \n\t 5'-{formatChar(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(binaryPW)[::-1]))+'0')).replace('T','U'),10)}-3'")
-# print(
-#     f"11. mRNA => AA: \n\t NH2-{formatChar(RNA2aminoAcids(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(binaryPW)[::-1]))+'0')).replace('T','U')),10)}-COOH")
+
+print(f"0. Password: \n\t {password}")
+print(f"1. Password => ASCII: \n\t {strToASCII(password)}")
+print(f"2. ASCII => Binary: \n\t {formatChar(stringToBin(password),8)}")
+print(
+    f"3. Binary => DNA Coding Strand: \n\t 3'-{formatChar(binToDNA(stringToBin(password)),10)}-5'")
+print(
+    f"4. Reverse DNA Coding Strand: \n\t 5'-{formatChar(binToDNA(stringToBin(password))[::-1],10)}-3'")
+print(
+    f"5. DNA Coding Strand => DNA Template Strand: \n\t 3'-{formatChar(compStrand(binToDNA(stringToBin(password))[::-1]),10)}-5'")
+print(
+    f"6. DNA Template Strand => Binary: \n\t {formatChar(DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1])),10)}")
+print(
+    f"7. Add Zeros to Both Ends: \n\t {formatChar('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0',10)}")
+print(
+    f"8. Binary => DNA Template Strand: \n\t 3'-{formatChar(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0'),10)}-5'")
+print(
+    f"9. DNA Template Strand => DNA Coding Strand: \n\t 5'-{formatChar(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0')),10)}-3'")
+print(
+    f"10. DNA Coding Strand => mRNA: \n\t 5'-{formatChar(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0')).replace('T','U'),10)}-3'")
+print(
+    f"11. mRNA => AA: \n\t NH2-{formatChar(RNA2aminoAcids(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0')).replace('T','U')),10)}-COOH")
