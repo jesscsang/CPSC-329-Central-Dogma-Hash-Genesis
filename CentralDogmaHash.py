@@ -1,13 +1,15 @@
 
 def stringToBin(string):
+    """
+    ASCII is a 7-bit code but when it is stored as a byte the MSB is 0.
+
+    We decided to not append the 0 to the MSB so attackers cannot figure 
+    out how the ASCII bits were appended together using the spacing of
+    these leading zeros.
+    """
     resultBin = ""
     for char in string:
-        # print(f'char: {char} bin: {bin(ord(char))} cut: {bin(ord(char))[2:]}')
-        """
-        Add zero or not?:
-            ASCII is a 7-bit code but when it is stored as a byte the MSB is 0
-        """
-        resultBin += "0" + bin(ord(char))[2:]
+        resultBin += bin(ord(char))[2:]
     return resultBin
 
 
@@ -146,35 +148,38 @@ def CentralDogmaHash(password, salt =""):
     return RNA2aminoAcids(compStrand(binToDNA(DNA2bin(compStrand(binToDNA(rotateCircularArray(stringToBin(password),implicitSalt))[::-1])))).replace('T', 'U'))
 
 
-password = "password"
-print(CentralDogmaHash(password))
+password1 = "password"
+password2 = "passwords"
+print(CentralDogmaHash(password1))
+print(CentralDogmaHash(password2))
 
-implicitSalt = sumASCII(password)
-saltedPassword = str(implicitSalt) + password
+# password = "password"
+# implicitSalt = sumASCII(password)
+# saltedPassword = str(implicitSalt) + password
 
-"""RNA2aminoAcids(compStrand(binToDNA(DNA2bin(compStrand(binToDNA(rotateCircularArray(
-    stringToBin(password),implicitSalt))[::-1])))).replace('T', 'U'))"""
+# """RNA2aminoAcids(compStrand(binToDNA(DNA2bin(compStrand(binToDNA(rotateCircularArray(
+#     stringToBin(password),implicitSalt))[::-1])))).replace('T', 'U'))"""
 
 
 
-print(f"0. Password: \n\t {password}")
-print(f"1. Password => ASCII: \n\t {strToASCII(password)}")
-print(f"2. ASCII => Binary: \n\t {formatChar(stringToBin(password),8)}")
-print(
-    f"3. Binary => DNA Coding Strand: \n\t 3'-{formatChar(binToDNA(stringToBin(password)),10)}-5'")
-print(
-    f"4. Reverse DNA Coding Strand: \n\t 5'-{formatChar(binToDNA(stringToBin(password))[::-1],10)}-3'")
-print(
-    f"5. DNA Coding Strand => DNA Template Strand: \n\t 3'-{formatChar(compStrand(binToDNA(stringToBin(password))[::-1]),10)}-5'")
-print(
-    f"6. DNA Template Strand => Binary: \n\t {formatChar(DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1])),10)}")
-print(
-    f"7. Add Zeros to Both Ends: \n\t {formatChar('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0',10)}")
-print(
-    f"8. Binary => DNA Template Strand: \n\t 3'-{formatChar(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0'),10)}-5'")
-print(
-    f"9. DNA Template Strand => DNA Coding Strand: \n\t 5'-{formatChar(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0')),10)}-3'")
-print(
-    f"10. DNA Coding Strand => mRNA: \n\t 5'-{formatChar(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0')).replace('T','U'),10)}-3'")
-print(
-    f"11. mRNA => AA: \n\t NH2-{formatChar(RNA2aminoAcids(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0')).replace('T','U')),10)}-COOH")
+# print(f"0. Password: \n\t {password}")
+# print(f"1. Password => ASCII: \n\t {strToASCII(password)}")
+# print(f"2. ASCII => Binary: \n\t {formatChar(stringToBin(password),7)}")
+# print(
+#     f"3. Binary => DNA Coding Strand: \n\t 3'-{formatChar(binToDNA(stringToBin(password)),10)}-5'")
+# print(
+#     f"4. Reverse DNA Coding Strand: \n\t 5'-{formatChar(binToDNA(stringToBin(password))[::-1],10)}-3'")
+# print(
+#     f"5. DNA Coding Strand => DNA Template Strand: \n\t 3'-{formatChar(compStrand(binToDNA(stringToBin(password))[::-1]),10)}-5'")
+# print(
+#     f"6. DNA Template Strand => Binary: \n\t {formatChar(DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1])),7)}")
+# print(
+#     f"7. Add Zeros to Both Ends: \n\t {formatChar('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0',7)}")
+# print(
+#     f"8. Binary => DNA Template Strand: \n\t 3'-{formatChar(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0'),10)}-5'")
+# print(
+#     f"9. DNA Template Strand => DNA Coding Strand: \n\t 5'-{formatChar(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0')),10)}-3'")
+# print(
+#     f"10. DNA Coding Strand => mRNA: \n\t 5'-{formatChar(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0')).replace('T','U'),10)}-3'")
+# print(
+#     f"11. mRNA => AA: \n\t NH2-{formatChar(RNA2aminoAcids(compStrand(binToDNA('0'+DNA2bin(compStrand(binToDNA(stringToBin(password))[::-1]))+'0')).replace('T','U')),10)}-COOH")
