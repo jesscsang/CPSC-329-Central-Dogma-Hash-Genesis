@@ -147,11 +147,59 @@ def CentralDogmaHash(password, salt =""):
     print(saltedPassword)
     return RNA2aminoAcids(compStrand(binToDNA(DNA2bin(compStrand(binToDNA(rotateCircularArray(stringToBin(password),implicitSalt))[::-1])))).replace('T', 'U'))
 
+def SimplifiedHash(password):
+    rotateBy = sumASCII(password)
+    return RNA2aminoAcids(binToDNA(rotateCircularArray(stringToBin(password),rotateBy)).replace('T', 'U'))
 
-password1 = "password"
-password2 = "passwords"
-print(CentralDogmaHash(password1))
-print(CentralDogmaHash(password2))
+
+def ReverseHash(_hash):
+    return aa2RNA(_hash)
+password = "pw"
+print(SimplifiedHash(password))
+
+
+def aa2RNA(_hash):
+    rnaResult = ""
+    RNA_Codons = {
+        # 'M' - START, '_' - STOP
+        "GCU": "A", "GCC": "A", "GCA": "A", "GCG": "A",
+        "UGU": "C", "UGC": "C",
+        "GAU": "D", "GAC": "D",
+        "GAA": "E", "GAG": "E",
+        "UUU": "F", "UUC": "F",
+        "GGU": "G", "GGC": "G", "GGA": "G", "GGG": "G",
+        "CAU": "H", "CAC": "H",
+        "AUA": "I", "AUU": "I", "AUC": "I",
+        "AAA": "K", "AAG": "K",
+        "UUA": "L", "UUG": "L", "CUU": "L", "CUC": "L", "CUA": "L", "CUG": "L",
+        "AUG": "M",
+        "AAU": "N", "AAC": "N",
+        "CCU": "P", "CCC": "P", "CCA": "P", "CCG": "P",
+        "CAA": "Q", "CAG": "Q",
+        "CGU": "R", "CGC": "R", "CGA": "R", "CGG": "R", "AGA": "R", "AGG": "R",
+        "UCU": "S", "UCC": "S", "UCA": "S", "UCG": "S", "AGU": "S", "AGC": "S",
+        "ACU": "T", "ACC": "T", "ACA": "T", "ACG": "T",
+        "GUU": "V", "GUC": "V", "GUA": "V", "GUG": "V",
+        "UGG": "W",
+        "UAU": "Y", "UAC": "Y",
+        "UAA": "", "UAG": "", "UGA": ""
+    }
+
+    for aa in _hash:
+        for key in RNA_Codons:
+            if (RNA_Codons[key] == aa):
+                rnaResult += key
+    return rnaResult
+
+_hash = "SL"
+print(aa2RNA(_hash))
+
+print(rotateCircularArray("11100001110111",7))
+
+# password1 = "password"
+# password2 = "passwords"
+# print(CentralDogmaHash(password1))
+# print(CentralDogmaHash(password2))
 
 # password = "password"
 # implicitSalt = sumASCII(password)
