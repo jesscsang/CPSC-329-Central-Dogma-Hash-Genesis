@@ -49,7 +49,7 @@ def rotateCircularArray(string,shift,direction="fwd"):
 
 def binToDNA(bin):
     DNA_Result = ""
-    bin2DnaMap = {"00": "A", "01": "G", "10": "C", "11": "T"}
+    bin2DnaMap = {"00": "A", "01": "T", "10": "G", "11": "C"}
 
     for i in range(0, len(bin)-1, 2):
         binaryPair = bin[i]+bin[i+1]
@@ -149,13 +149,16 @@ def CentralDogmaHash(password, salt =""):
 
 def SimplifiedHash(password):
     rotateBy = sumASCII(password)
+    # print(stringToBin(password))
+    # print(rotateCircularArray(stringToBin(password),rotateBy))
+    # print(binToDNA(rotateCircularArray(stringToBin(password),rotateBy)).replace('T', 'U'))
+    # print(RNA2aminoAcids(binToDNA(rotateCircularArray(stringToBin(password),rotateBy)).replace('T', 'U')))
     return RNA2aminoAcids(binToDNA(rotateCircularArray(stringToBin(password),rotateBy)).replace('T', 'U'))
 
 
 def ReverseHash(_hash):
     return aa2RNA(_hash)
-password = "pw"
-print(SimplifiedHash(password))
+
 
 
 def aa2RNA(_hash):
@@ -191,10 +194,18 @@ def aa2RNA(_hash):
                 rnaResult += key
     return rnaResult
 
-_hash = "SL"
-print(aa2RNA(_hash))
+print(SimplifiedHash("pw"))
 
-print(rotateCircularArray("11100001110111",7))
+# print(binToDNA(rotateCircularArray(stringToBin("wM"),0)).replace('T', 'U'))
+
+# print(rotateCircularArray("111001111101",0,"bwd"))
+# password = "pw"
+# print(SimplifiedHash(password))
+
+_hash = "SL"
+# print(aa2RNA(_hash))
+
+# print(rotateCircularArray("11100001110111",7))
 
 # password1 = "password"
 # password2 = "passwords"
