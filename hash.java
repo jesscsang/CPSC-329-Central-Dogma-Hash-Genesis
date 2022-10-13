@@ -4,92 +4,73 @@ import java.util.Scanner;
 import java.lang.Math;
 import java.util.stream.Collectors;
 
-
 public class hash {
-    static ArrayList<Double> finaleboy = new ArrayList<Double>();
-    static ArrayList<Integer> finaleboy2 = new ArrayList<Integer>();
-    static String finaleoffinale = "";
+    static ArrayList<String> ascii_list = new ArrayList<String>();
+    static ArrayList<Double> math_list = new ArrayList<Double>();
+    static ArrayList<Integer> mod_list = new ArrayList<Integer>();
+
+    ///////////////////begin main method///////////////////
     public static void main(String[] args){
-        ArrayList<String> list = new ArrayList<String>();
         Scanner scanner = new Scanner(System.in);
         System.out.print("Please enter string: ");
-        String input = scanner.nextLine();
+        String input = scanner.nextLine(); // get user input
 
-        for(int i = 0; i < input.length(); i++){
+        for(int i = 0; i < input.length(); i++){ // turn every character in password to ascii value
             int ascii = (int) input.charAt(i);
-            list.add(String.valueOf(ascii));
+            ascii_list.add(String.valueOf(ascii)); // add ascii values to ascii_list
+        }
+        for(int i = 0; i < ascii_list.size(); i++){ // for every value in ascii_list
+            math(ascii_list.get(i)); // run hash method below with ascii value
         }
 
-
-        for(int i = 0; i < list.size(); i++){
-            hash(list.get(i));
-        }
-
-        convertToHex();
-
-        sort();
+        mod(); // run mod method
+        sort(); // run sort method
     }
+    ///////////////////end main method///////////////////
 
-    public static void hash(String input){
-        ArrayList<String> list1 = new ArrayList<String>();
-        list1.clear();
+    ///////////////////begin math method///////////////////
+    public static void math(String input){ // hash method
+        ArrayList<String> individual = new ArrayList<String>(); // define individual list where each ascii value will be split to individual characters
+        individual.clear(); // make sure that the list is empty
 
-        for(int i = 0; i< input.length(); i++){
-            list1.add(String.valueOf(input.charAt(i)));
+        for(int i = 0; i< input.length(); i++){ // for every value in individual list
+            individual.add(String.valueOf(input.charAt(i)));
+            // add value to list. Example: ascii_list -> [104, 105] -----> output two individual lists
+            // the first is [1, 0, 4] and the second is [1, 0, 5]
         }
 
-        System.out.println(list1);
+        if(individual.size() == 3){ // if the individual list has a length of 3 (I did this because some ascii values will have an individual list that is made up of only two indices. could write an else if later on)
+            int l0 = Integer.parseInt(individual.get(0)); // l0 is the first index in the individual list
+            int l1 = Integer.parseInt(individual.get(1)); // l1 is the second index in the individual list
+            int l2 = Integer.parseInt(individual.get(2)); // l2 is the third index in the individual list
+            // below is just math which will be put in variable "hash"
+            int hash = (int) (((Math.pow(l0 + individual.size(), 10) + Math.pow(l1 + individual.size(), 10)) / (individual.size())) / (l2 * individual.size()));
 
-        if(list1.size() == 3){
-            int l0 = Integer.parseInt(list1.get(0));
-            System.out.println("l0 is " + l0);
-            int l1 = Integer.parseInt(list1.get(1));
-            System.out.println("l1 is " + l1);
-            int l2 = Integer.parseInt(list1.get(2));
-            System.out.println("l2 is " + l2);
-            int hash = (int) (((Math.pow(l0 + list1.size(), 10) + Math.pow(l1 + list1.size(), 10)) / (list1.size())) / (l2 * list1.size()));
-            System.out.println("hash is " + hash);
-            System.out.println("huh? " + hash);
-
-            double finale;
-            finale = Math.pow(hash, 3);
-            finaleboy.add(finale);
-            System.out.println("finaleboy " + finaleboy);
-
+            double finale; // initiate variable finale
+            finale = Math.pow(hash, 3); // finale is hash^3
+            math_list.add(finale); // add the finale number to math_list
         }
     }
+    ///////////////////End math method///////////////////
 
-    public static void convertToHex(){
-        for(int i = 0; i < finaleboy.size(); i++){
-            double hi = finaleboy.get(i) % 10000;
-            finaleboy2.add((int) hi);
+    ///////////////////begin mod method///////////////////
+    public static void mod(){
+        for(int i = 0; i < math_list.size(); i++){ // for all the values in math list
+            double mod_value = math_list.get(i) % 10000; // get the four most digits on the right of the value
+            mod_list.add((int) mod_value); // add that value to mod_list
         }
-
-        System.out.println("ladies and gentlemen " + finaleboy2);
-
-
-        for(int i = 0; i < finaleboy2.size(); i++){
-            finaleoffinale = finaleoffinale + finaleboy2.get(i);
-        }
-
-        System.out.println("serious finale " + finaleoffinale);
     }
+    ///////////////////end mod method///////////////////
 
-
+    ///////////////////begin sort method///////////////////
     public static void sort(){
-        System.out.println("ok so we have " + finaleboy2);
-
-        List<Integer> sortedList = finaleboy2.stream().sorted().collect(Collectors.toList());
-        System.out.println(sortedList);
-
-        String sortedfinale = "";
-        for(int i = 0; i < sortedList.size(); i++){
-            sortedfinale = sortedfinale + sortedList.get(i);
+        List<Integer> sortedList = mod_list.stream().sorted().collect(Collectors.toList()); // sort the mod_list from in ascending order
+        String sortedString = ""; // empty string which we will append to
+        for(int i = 0; i < sortedList.size(); i++){ // for every value in assorted_list
+            sortedString = sortedString + sortedList.get(i); // append value to sortedString
         }
 
-        System.out.println("output " + sortedfinale);
+        System.out.println("output " + sortedString); // print finale output
     }
-
-
-
+    ///////////////////end sort method///////////////////
 }
