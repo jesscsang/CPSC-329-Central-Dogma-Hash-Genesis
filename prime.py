@@ -1,8 +1,4 @@
 
-# Python program to print all Primes Smaller
-# than or equal to N using Sieve of Eratosthenes
-
-
 def SieveOfEratosthenes(num):
     prime = [True for i in range(num+1)]
     print(prime)
@@ -25,51 +21,34 @@ def SieveOfEratosthenes(num):
             print(f'p: {p}: bin: {bin(p)}')
 
 
-# SieveOfEratosthenes(10**14)
-
-def get_nth_prime(nth):
-    """ Returns the n-th prime number
-    """
-    total_primes = 0
-    size_factor = 2
-    s = (nth * size_factor)
-    while total_primes < nth:
-        primes = get_primes(s)
-        total_primes = sum(primes[2:])
-        size_factor += 1
-        s = (nth * size_factor)
-    nth_prime = count_primes(primes, nth)
-    return nth_prime
+FIRST_PRIME = 2
 
 
-def get_primes(s):
-    """ Generates primes using the Sieve of Eratosthenes
-        Includes the optimization where for every prime p, only factors p >= p^2
-        are verified.
-        The list of primes is represented with a bytearray. Each index corresponds
-        to an integer in the list. A value of "1" at the index location indicates
-        the integer is a prime.
-    """
-    primes = bytearray([1]*s)
-    for i in range(2, s):
-        if primes[i] == 1:
-            for j in range(i, s):
-                if i*j < s:
-                    primes[i*j] = 0
-                else:
-                    break
-    return primes
+def n_th_prime(n):
+    primes = [FIRST_PRIME]
+    n_th_prime = FIRST_PRIME
+    while (len(primes) < n):
+        n_th_prime += 1
+        isDivisibleByPrime = False
+        for p in primes:
+            if n_th_prime % p == 0:
+                isDivisibleByPrime = True
+        if not isDivisibleByPrime:
+            isDivisibleByPrime = False
+            primes.append(n_th_prime)
+    return n_th_prime
 
 
-def count_primes(primes, nth):
-    """ Returns the n-th prime represented by the index of the n-th "1" in the
-        bytearray.
-    """
-    count = 0
-    for k in range(2, len(primes)):
-        count += primes[k]
-        if count == nth:
-            return k
+def find_prime_larger_than_n(n):
+    prime_1 = 2
+    prime_2 = 3
+    result_prime = prime_1
+    while (result_prime < n):
+        result_prime = prime_1*prime_2+1
+        # prime_1 = prime_2
+        prime_2 = result_prime
+
+    return result_prime
 
 
-print(get_nth_prime(1000000))
+print(find_prime_larger_than_n(10**13))

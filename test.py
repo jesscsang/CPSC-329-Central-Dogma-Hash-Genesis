@@ -21,7 +21,7 @@ def remapASCII(ASCII):
     L_1 = int(L_1)
     L_2 = int(L_2)
 
-    return floor(floor(((L_0+3)**10 + (L_1+3)**10)/3)/(L_2+3))**3
+    return floor(floor(((L_0+3)**10 + (L_1+3)**10)/3)/(L_2+3))**3 % 17592186044415
 
 
 hashes = {}
@@ -29,7 +29,7 @@ for asciiVal in range(33, 127):
 
     _hash = remapASCII(asciiVal)
 
-    # print(_hash)
+    print(_hash)
 
     if _hash in hashes:
         # Increment the count of an existing hash by 1
@@ -40,7 +40,7 @@ for asciiVal in range(33, 127):
         # "hash": "count"
         hashes[_hash] = 1
 
-print(sorted(hashes.keys()))
+# print(sorted(hashes.keys()))
 # min = 29124297227663
 # max = 325620017749655509090396059873
-print(dict(sorted(hashes.items(), key=lambda item: item[1])))
+# print(dict(sorted(hashes.items(), key=lambda item: item[1])))
