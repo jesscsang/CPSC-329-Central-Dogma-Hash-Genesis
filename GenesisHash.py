@@ -33,7 +33,7 @@ def remapASCII(ASCII):
         max = 325620017749655509090396059873 (30 digits)
     """
     return floor(floor(((L_0+3)**10 + (L_1+3)**10)/3) /
-                 (L_2+3))**3 % (10**14-1)
+                 (L_2+3))**3 % (10**13)
 
 
 def append_even_string_index(str):
@@ -68,7 +68,7 @@ _hash = append_even_string_index(
 while _hash < 10**256:
     _hash = _hash**2
 
-_hash = _hash % (10**256-1)
+_hash = _hash % (10**255)
 
 print(f'hash: {_hash}\n')
 print(len(str(_hash)))
