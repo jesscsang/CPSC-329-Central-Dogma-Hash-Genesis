@@ -51,6 +51,14 @@ def sum_odd_string_index(str):
             result += int(str[i])
     return result
 
+def appendEvenOrOddIndices(str, type="even"):
+    result = ""
+    for i in range(len(str)):
+        if (i % 2 == 0 and type == "even"):
+            result += str[i]
+        if (i % 2 != 0 and type != "even"):
+            result += str[i]
+    return int(result)
 
 def strToRemappedASCII(string):
     resultASCII = ""
@@ -62,13 +70,22 @@ def strToRemappedASCII(string):
 password = "password"
 
 remappedASCII_PW = strToRemappedASCII(password)
-_hash = append_even_string_index(
-    remappedASCII_PW) + sum_odd_string_index(remappedASCII_PW)
+print(f'Remapped ASCII: {remappedASCII_PW}')
+print(f'Even: {appendEvenOrOddIndices(remappedASCII_PW,"even")}')
+print(f'Odd: {appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
+_hash = appendEvenOrOddIndices(
+    remappedASCII_PW,"even") + appendEvenOrOddIndices(remappedASCII_PW,"odd")
 
+print(f'Sum: {appendEvenOrOddIndices(remappedASCII_PW,"even") + appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
+print(f'Mod: {appendEvenOrOddIndices(remappedASCII_PW,"even") % appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
+print(f'Product: {appendEvenOrOddIndices(remappedASCII_PW,"even") * appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
+
+# _hash = appendEvenOrOddIndices(remappedASCII_PW,"even") + appendEvenOrOddIndices(remappedASCII_PW,"odd")
 while _hash < 10**256:
     _hash = _hash**2
 
 _hash = _hash % (10**255)
+
 
 print(f'hash: {_hash}\n')
 print(len(str(_hash)))
