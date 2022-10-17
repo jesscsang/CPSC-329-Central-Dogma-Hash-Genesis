@@ -14,7 +14,11 @@ def remapASCII(ASCII):
     strASCII = str(ASCII)
 
     # Use string methods to separate ASCII digits
-    if ASCII < 100:
+    if ASCII < 10:
+        # Single digit ASCII values
+        L_0 = L_1 = LEADING_ZERO
+        L_2 = strASCII
+    elif ASCII < 100:
         # Two digit ASCII values
         L_0 = LEADING_ZERO
         L_1, L_2 = strASCII
