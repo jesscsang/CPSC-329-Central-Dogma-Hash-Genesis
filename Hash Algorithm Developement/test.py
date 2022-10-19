@@ -21,11 +21,11 @@ def remapASCII(ASCII):
     L_1 = int(L_1)
     L_2 = int(L_2)
 
-    return floor(floor(((L_0+3)**10 + (L_1+3)**10)/3)/(L_2+3))**3 % 17592186044415
+    return floor(floor(((L_0+3)**10 + (L_1+3)**10)/3)/(L_2+3))**3 % 10**14
 
 
 hashes = {}
-for asciiVal in range(33, 127):
+for asciiVal in range(32, 127):
 
     _hash = remapASCII(asciiVal)
 
@@ -44,3 +44,6 @@ for asciiVal in range(33, 127):
 # min = 29124297227663
 # max = 325620017749655509090396059873
 # print(dict(sorted(hashes.items(), key=lambda item: item[1])))
+5532848628375
+29124297227663
+8047702601728

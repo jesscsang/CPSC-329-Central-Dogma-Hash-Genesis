@@ -37,7 +37,7 @@ def remapASCII(ASCII):
         max = 325620017749655509090396059873 (30 digits)
     """
     return floor(floor(((L_0+3)**10 + (L_1+3)**10)/3) /
-                 (L_2+3))**3 % (10**13)
+                 (L_2+3))**3 % (10**14)
 
 
 def append_even_string_index(str):
@@ -80,15 +80,12 @@ print(f'Odd: {appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
 _hash = appendEvenOrOddIndices(
     remappedASCII_PW,"even") + appendEvenOrOddIndices(remappedASCII_PW,"odd")
 
-print(f'Sum: {appendEvenOrOddIndices(remappedASCII_PW,"even") + appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
-print(f'Mod: {appendEvenOrOddIndices(remappedASCII_PW,"even") % appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
-print(f'Product: {appendEvenOrOddIndices(remappedASCII_PW,"even") * appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
+print(f'sum: {_hash}\n')
 
-# _hash = appendEvenOrOddIndices(remappedASCII_PW,"even") + appendEvenOrOddIndices(remappedASCII_PW,"odd")
-while _hash < 10**256:
-    _hash = _hash**2
+while _hash < 10**512:
+    _hash = _hash**3
 
-_hash = _hash % (10**255)
+_hash = appendEvenOrOddIndices(str(_hash),"odd")
 
 
 print(f'hash: {_hash}\n')
