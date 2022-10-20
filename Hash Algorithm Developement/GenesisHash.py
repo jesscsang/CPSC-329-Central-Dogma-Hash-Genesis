@@ -63,9 +63,40 @@ def appendEvenOrOddIndices(str, type="even",length=-1):
     return int(result)
 
 def intronSplicing(decimal):
-    """5'-GU...AG-3'"""
+    """
+    5'-GU...AG-3'
+    5'-1001...0010-3'
+    5'-oeeo...eeoe-3'
+    """
     strDecimal = str(decimal)
-    
+    startRemove = -1
+    endRemove = -1
+    startKeep = 0
+    endKeep = -1
+    result =""
+    for i in range(len(strDecimal)-3):
+        # Start of Intron
+        if (int(strDecimal[i]) % 2 != 0 and 
+        int(strDecimal[i+1]) % 2 == 0 and 
+        int(strDecimal[i+2]) % 2 == 0 and
+        int(strDecimal[i+3]) % 2 != 0):
+            startRemove = i
+        # End of Intron
+        if (int(strDecimal[i]) % 2 == 0 and 
+        int(strDecimal[i+1]) % 2 == 0 and 
+        int(strDecimal[i+2]) % 2 != 0 and
+        int(strDecimal[i+3]) % 2 == 0):
+            endRemove = i
+        # Remove Intron
+        if startRemove > endRemove:
+            if startRemove == 0:
+                startKeep = startRemove+1
+            else:
+                keepEnd = startRemove
+                result += strDecimal[startRemove:keepEnd] # Check if splice is inclusive or exclusive
+                startKeep = startRemove+1
+                
+    return result
 
 def decimalToBin(decimal):
     strDecimal = str(decimal)
