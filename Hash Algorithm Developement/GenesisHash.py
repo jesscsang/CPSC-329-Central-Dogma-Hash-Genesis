@@ -62,6 +62,11 @@ def appendEvenOrOddIndices(str, type="even",length=-1):
             lengthReached = True
     return int(result)
 
+def intronSplicing(decimal):
+    """5'-GU...AG-3'"""
+    strDecimal = str(decimal)
+    
+
 def decimalToBin(decimal):
     strDecimal = str(decimal)
     binary = ""
