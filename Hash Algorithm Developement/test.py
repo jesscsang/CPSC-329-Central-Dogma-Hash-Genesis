@@ -1,49 +1,50 @@
-# 33 - 126
-# https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html
+def intronSplicing(decimal):
+    """
+    5'-GU...AG-3'
+    5'-1001...0010-3'
+    5'-oeeo...eeoe-3'
+    """
+    strDecimal = str(decimal)
+    dnaLen = len(strDecimal)
+    if dnaLen >= 8:
+        introns = []
+        startRemove = -1
+        endRemove = -1
+        startFound = False
+        endFound = False
+        result =""
+        for i in range(dnaLen-3-4):
+            # Start of Intron
+            if (not startFound and
+            int(strDecimal[i]) % 2 ==1 and 
+            int(strDecimal[i+1]) % 2 == 0 and 
+            int(strDecimal[i+2]) % 2 == 0 and
+            int(strDecimal[i+3]) % 2 ==1):
+                startRemove = i
+                startFound = True
+                print(f"Start: {startRemove}")
+            # End of Intron
+            if (startFound and 
+            int(strDecimal[i+4]) % 2 == 0 and 
+            int(strDecimal[i+4+1]) % 2 == 0 and 
+            int(strDecimal[i+4+2]) % 2 ==1 and
+            int(strDecimal[i+4+3]) % 2 == 0):
+                endRemove = i+4+3
+                endFound = True
+                print(f"End: {endRemove}")
+            # Remove Intron
+            if endFound:
+                startFound = False
+                endFound = False
+                introns.append(strDecimal[startRemove:endRemove+1])
+                print(f'Intron: {strDecimal[startRemove:endRemove+1]}')
+        for intron in introns:
+            intronLen = len(intron)
+            if (dnaLen-intronLen>14):
+                dnaLen-=intronLen
+                strDecimal = strDecimal.replace(intron,"")
+                
+    return strDecimal
 
-from math import floor
-
-
-def remapASCII(ASCII):
-    strASCII = str(ASCII)
-
-    # Use string methods to separate ASCII digits
-    if ASCII < 100:
-        # Two digit ASCII values
-        L_0 = "0"
-        L_1, L_2 = strASCII
-    else:
-        # Three digit ASCII values
-        L_0, L_1, L_2 = strASCII
-
-    # Convert separate string digits back to int
-    L_0 = int(L_0)
-    L_1 = int(L_1)
-    L_2 = int(L_2)
-
-    return floor(floor(((L_0+3)**10 + (L_1+3)**10)/3)/(L_2+3))**3 % 10**14
-
-
-hashes = {}
-for asciiVal in range(32, 127):
-
-    _hash = remapASCII(asciiVal)
-
-    print(_hash)
-
-    if _hash in hashes:
-        # Increment the count of an existing hash by 1
-        hashes[_hash] += 1
-    else:
-        # Add the new hash to the dictionary with count 1 in the
-        # following format
-        # "hash": "count"
-        hashes[_hash] = 1
-
-# print(sorted(hashes.keys()))
-# min = 29124297227663
-# max = 325620017749655509090396059873
-# print(dict(sorted(hashes.items(), key=lambda item: item[1])))
-5532848628375
-29124297227663
-8047702601728
+DNA = "2222222222222222222222221001777700102222222222222222222"
+print(intronSplicing(DNA))
