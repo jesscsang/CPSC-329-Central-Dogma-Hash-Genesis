@@ -1,4 +1,4 @@
-def intronSplicing(decimal):
+def intronSplicing(decimal,threshold=14):
     """
     5'-GU...AG-3'
     5'-1001...0010-3'
@@ -13,7 +13,7 @@ def intronSplicing(decimal):
         startFound = False
         endFound = False
         result =""
-        for i in range(dnaLen-3-4):
+        for i in range(dnaLen-7):
             # Start of Intron
             if (not startFound and
             int(strDecimal[i]) % 2 ==1 and 
@@ -26,10 +26,10 @@ def intronSplicing(decimal):
             # End of Intron
             if (startFound and 
             int(strDecimal[i+4]) % 2 == 0 and 
-            int(strDecimal[i+4+1]) % 2 == 0 and 
-            int(strDecimal[i+4+2]) % 2 ==1 and
-            int(strDecimal[i+4+3]) % 2 == 0):
-                endRemove = i+4+3
+            int(strDecimal[i+5]) % 2 == 0 and 
+            int(strDecimal[i+6]) % 2 ==1 and
+            int(strDecimal[i+7]) % 2 == 0):
+                endRemove = i+7
                 endFound = True
                 print(f"End: {endRemove}")
             # Remove Intron
@@ -40,11 +40,11 @@ def intronSplicing(decimal):
                 print(f'Intron: {strDecimal[startRemove:endRemove+1]}')
         for intron in introns:
             intronLen = len(intron)
-            if (dnaLen-intronLen>14):
+            if (dnaLen-intronLen>=threshold):
                 dnaLen-=intronLen
                 strDecimal = strDecimal.replace(intron,"")
                 
     return strDecimal
 
-DNA = "2222222222222222222222221001777700102222222222222222222"
-print(intronSplicing(DNA))
+DNA = "31001777700104"
+print(intronSplicing(DNA,0))

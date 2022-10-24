@@ -4,9 +4,9 @@ ones_digit = {}
 twos_digit = {}
 threes_digit = {}
 power = 3
-for i in range (1,1000):
+for i in range (1,10000000):
     outcome_power = i**power
-    print(floor(outcome_power))
+    # print(floor(outcome_power))
     _1stDigit = floor(outcome_power)%10
     if _1stDigit in ones_digit:
         ones_digit[_1stDigit] += 1
