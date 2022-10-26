@@ -2,7 +2,14 @@
 # https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html
 
 from math import floor
+from time import perf_counter
 
+def pseudoRandom(seed=perf_counter()):
+    """
+    After running for one minute:
+        ones digit: {0: 10092, 1: 10276, 2: 10094, 3: 10058, 4: 9916, 5: 10099, 6: 10007, 7: 10019, 8: 10080, 9: 10052}
+    """
+    return floor(seed**3)%10
 
 def remapASCII(ASCII):
     strASCII = str(ASCII)
@@ -44,6 +51,3 @@ for asciiVal in range(32, 127):
 # min = 29124297227663
 # max = 325620017749655509090396059873
 # print(dict(sorted(hashes.items(), key=lambda item: item[1])))
-5532848628375
-29124297227663
-8047702601728
