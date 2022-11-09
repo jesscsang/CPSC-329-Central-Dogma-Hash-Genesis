@@ -1,9 +1,7 @@
 from math import floor
 
-LEADING_ZERO = "0"
 
-
-def remapASCII(ASCII):
+def remappedASCII(ASCII):
     """
     95 Printable characters 32 - 126
     https://en.wikipedia.org/wiki/ASCII
@@ -11,6 +9,8 @@ def remapASCII(ASCII):
 
     Remaps ASCII value to some unique 12-14 digit value (Tested).
     """
+    LEADING_ZERO = "0"
+
     strASCII = str(ASCII)
 
     # Use string methods to separate ASCII digits
@@ -39,13 +39,15 @@ def remapASCII(ASCII):
     return floor(floor(((L_0+3)**10 + (L_1+3)**10)/3) /
                  (L_2+3))**3 % (10**14)
 
+
 def strToRemappedASCII(string):
     resultASCII = ""
     for char in string:
-        resultASCII += str(remapASCII(ord(char)))
+        resultASCII += str(remappedASCII(ord(char)))
     return resultASCII
 
-def appendEvenOrOddIndices(str, type="even",length=-1):
+
+def appendEvenOrOddIndices(str, type="even", length=-1):
     result = ""
     i = 0
     counter = 0
@@ -57,46 +59,57 @@ def appendEvenOrOddIndices(str, type="even",length=-1):
         if (i % 2 != 0 and type != "even"):
             result += str[i]
             counter += 1
-        i+=1
-        if (length != -1 and counter > length ):
+        i += 1
+        if (length != -1 and counter > length):
             lengthReached = True
     return int(result)
 
-def intronSplicing(decimal):
+
+def intronSplicing(decimal, threshold=14):
     """
     5'-GU...AG-3'
     5'-1001...0010-3'
     5'-oeeo...eeoe-3'
     """
     strDecimal = str(decimal)
-    startRemove = -1
-    endRemove = -1
-    startKeep = 0
-    endKeep = -1
-    result =""
-    for i in range(len(strDecimal)-3):
-        # Start of Intron
-        if (int(strDecimal[i]) % 2 != 0 and 
-        int(strDecimal[i+1]) % 2 == 0 and 
-        int(strDecimal[i+2]) % 2 == 0 and
-        int(strDecimal[i+3]) % 2 != 0):
-            startRemove = i
-        # End of Intron
-        if (int(strDecimal[i]) % 2 == 0 and 
-        int(strDecimal[i+1]) % 2 == 0 and 
-        int(strDecimal[i+2]) % 2 != 0 and
-        int(strDecimal[i+3]) % 2 == 0):
-            endRemove = i
-        # Remove Intron
-        if startRemove > endRemove:
-            if startRemove == 0:
-                startKeep = startRemove+1
-            else:
-                keepEnd = startRemove
-                result += strDecimal[startRemove:keepEnd] # Check if splice is inclusive or exclusive
-                startKeep = startRemove+1
-                
-    return result
+    dnaLen = len(strDecimal)
+    if dnaLen >= 8:
+        introns = []
+        startRemove = -1
+        endRemove = -1
+        startFound = False
+        endFound = False
+        result = ""
+        for i in range(dnaLen-7):
+            # Start of Intron
+            if (not startFound and
+                int(strDecimal[i]) % 2 == 1 and
+                int(strDecimal[i+1]) % 2 == 0 and
+                int(strDecimal[i+2]) % 2 == 0 and
+                    int(strDecimal[i+3]) % 2 == 1):
+                startRemove = i
+                startFound = True
+            # End of Intron
+            if (startFound and
+                int(strDecimal[i+4]) % 2 == 0 and
+                int(strDecimal[i+5]) % 2 == 0 and
+                int(strDecimal[i+6]) % 2 == 1 and
+                    int(strDecimal[i+7]) % 2 == 0):
+                endRemove = i+7
+                endFound = True
+            # Remove Intron
+            if endFound:
+                startFound = False
+                endFound = False
+                introns.append(strDecimal[startRemove:endRemove+1])
+        for intron in introns:
+            intronLen = len(intron)
+            if (dnaLen-intronLen >= threshold):
+                dnaLen -= intronLen
+                strDecimal = strDecimal.replace(intron, "")
+
+    return int(strDecimal)
+
 
 def decimalToBin(decimal):
     strDecimal = str(decimal)
@@ -104,6 +117,7 @@ def decimalToBin(decimal):
     for i in range(len(strDecimal)):
         binary += str(int(strDecimal[i]) % 2)
     return binary
+
 
 def binToRNA(bin):
     DNA_Result = ""
@@ -117,6 +131,7 @@ def binToRNA(bin):
                 DNA_Result += bin2DnaMap[key]
 
     return DNA_Result
+
 
 def RNA2aminoAcids(RNA):
     aaResult = ""
@@ -152,26 +167,43 @@ def RNA2aminoAcids(RNA):
                 aaResult += RNA_Codons[key]
     return aaResult
 
-password = "password"
 
-remappedASCII_PW = strToRemappedASCII(password)
-# print(f'Remapped ASCII: {remappedASCII_PW}')
-# print(f'Even: {appendEvenOrOddIndices(remappedASCII_PW,"even")}')
-# print(f'Odd: {appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
-_hash = appendEvenOrOddIndices(
-    remappedASCII_PW,"even") + appendEvenOrOddIndices(remappedASCII_PW,"odd")
+def desiredHashLength(_hash, hashLength=256):
+    while _hash < 10**(hashLength*2*3*2):
+        """
+        *2: takes two bits/digits to map to a DNA base 
+        *3: takes three DNA bases to map to a RNA codon
+        *2: double the length as appendEvenOrOddIndices() will reduce the length by at most half
+        """
+        _hash = _hash**3
+
+    _hash = appendEvenOrOddIndices(str(_hash), "odd", hashLength*2*3)
+    return _hash
 
 
-while _hash < 10**(256*2*3+2*256):  # double desire length plus buffer
-    _hash = _hash**3
+def genesisHash(password):
+    remappedASCII_PW = strToRemappedASCII(password)
+    print(f'Remapped ASCII: {remappedASCII_PW}')
+    print(f'Even: {appendEvenOrOddIndices(remappedASCII_PW,"even")}')
+    print(f'Odd: {appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
+    _hash = appendEvenOrOddIndices(
+        remappedASCII_PW, "even") + appendEvenOrOddIndices(remappedASCII_PW, "odd")
 
-_hash = appendEvenOrOddIndices(str(_hash),"odd",256*2*3)
+    for i in range(3):
+        _hash = desiredHashLength(_hash)
+        _hash = intronSplicing(_hash)
+        _hash = desiredHashLength(_hash)
 
-binary = decimalToBin(_hash)
+    binary = decimalToBin(_hash)
 
-RNA = binToRNA(binary)
+    RNA = binToRNA(binary)
 
-AA = RNA2aminoAcids(RNA)
+    AA = RNA2aminoAcids(RNA)
 
-print(f'hash: {AA}\n')
-print(len(AA))
+    return AA
+
+
+password = ""
+_hash = genesisHash(password)
+print(f'hash: {_hash}\n')
+print(len(_hash))
