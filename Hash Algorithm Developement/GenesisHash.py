@@ -1,3 +1,4 @@
+from time import perf_counter
 from math import floor
 
 
@@ -183,16 +184,13 @@ def desiredHashLength(_hash, hashLength=256):
 
 def genesisHash(password):
     remappedASCII_PW = strToRemappedASCII(password)
-    print(f'Remapped ASCII: {remappedASCII_PW}')
-    print(f'Even: {appendEvenOrOddIndices(remappedASCII_PW,"even")}')
-    print(f'Odd: {appendEvenOrOddIndices(remappedASCII_PW,"odd")}')
     _hash = appendEvenOrOddIndices(
         remappedASCII_PW, "even") + appendEvenOrOddIndices(remappedASCII_PW, "odd")
 
     for i in range(3):
         _hash = desiredHashLength(_hash)
         _hash = intronSplicing(_hash)
-        _hash = desiredHashLength(_hash)
+    _hash = desiredHashLength(_hash)
 
     binary = decimalToBin(_hash)
 
@@ -203,7 +201,18 @@ def genesisHash(password):
     return AA
 
 
-password = ""
+password = "lemon"
+start = perf_counter()
 _hash = genesisHash(password)
-print(f'hash: {_hash}\n')
-print(len(_hash))
+end = perf_counter() - start
+print(f'One 8 character password: {end} sec')
+print(f'All 8 character passwords: {(end*95**8)/(60*60*24)} days')
+print(f'hash: {genesisHash(password)}\n')
+
+# with open('bruteForce4CharPW.txt', 'a') as f:
+#     for c1 in (chr(i) for i in range(32, 127)):
+#         for c2 in (chr(i) for i in range(32, 127)):
+#             for c3 in (chr(i) for i in range(32, 127)):
+#                 for c4 in (chr(i) for i in range(32, 127)):
+#                     password = c1+c2+c3+c4
+#                     f.write(f'{password},{genesisHash(password)}\n')
