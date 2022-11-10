@@ -61,7 +61,7 @@ def appendEvenOrOddIndices(str, type="even", length=-1):
             result += str[i]
             counter += 1
         i += 1
-        if (length != -1 and counter > length):
+        if (length != -1 and counter == length):
             lengthReached = True
     return int(result)
 
@@ -202,11 +202,11 @@ def genesisHash(password):
 
 
 password = "lemon"
-start = perf_counter()
-_hash = genesisHash(password)
-end = perf_counter() - start
-print(f'One 8 character password: {end} sec')
-print(f'All 8 character passwords: {(end*95**8)/(60*60*24)} days')
+# start = perf_counter()
+# _hash = genesisHash(password)
+# end = perf_counter() - start
+# print(f'One 8 character password: {end} sec')
+# print(f'All 8 character passwords: {(end*95**3)/(60*60*24)} days')
 print(f'hash: {genesisHash(password)}\n')
 
 # with open('bruteForce4CharPW.txt', 'a') as f:
@@ -216,3 +216,11 @@ print(f'hash: {genesisHash(password)}\n')
 #                 for c4 in (chr(i) for i in range(32, 127)):
 #                     password = c1+c2+c3+c4
 #                     f.write(f'{password},{genesisHash(password)}\n')
+
+with open('bruteForce3CharPW.txt', 'a') as f:
+    for c1 in (chr(i) for i in range(32, 127)):
+        for c2 in (chr(i) for i in range(32, 127)):
+            for c3 in (chr(i) for i in range(32, 127)):
+                password = c1+c2+c3
+                f.write(f'{password},{genesisHash(password)}\n')
+                print(f'{password},{genesisHash(password)}\n')
