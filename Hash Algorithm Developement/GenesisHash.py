@@ -217,10 +217,14 @@ print(f'hash: {genesisHash(password)}\n')
 #                     password = c1+c2+c3+c4
 #                     f.write(f'{password},{genesisHash(password)}\n')
 
-with open('bruteForce3CharPW.txt', 'a') as f:
-    for c1 in (chr(i) for i in range(32, 127)):
-        for c2 in (chr(i) for i in range(32, 127)):
-            for c3 in (chr(i) for i in range(32, 127)):
+counter = 0
+for c1 in (chr(i) for i in range(32, 127)):
+    for c2 in (chr(i) for i in range(32, 127)):
+        for c3 in (chr(i) for i in range(32, 127)):
+            if counter % 100000 == 0:
+                fname = 'bruteForce3CharPW_'+str(int(counter/100000))+'.txt'
+            counter += 1
+            with open(fname, 'a') as f:
                 password = c1+c2+c3
                 f.write(f'{password},{genesisHash(password)}\n')
                 print(f'{password},{genesisHash(password)}\n')
