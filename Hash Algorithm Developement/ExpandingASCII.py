@@ -44,8 +44,9 @@ remappedASCII_Vals = {}
 for ASCII_Val in range(32, 127):
 
     newASCII_Val = remappedASCII(ASCII_Val)
+    # newASCII_Val = len(str(remappedASCII(ASCII_Val)))
 
-    print(newASCII_Val)
+    # print(newASCII_Val)
 
     if newASCII_Val in remappedASCII_Vals:
         # Increment the count of an existing hash by 1
@@ -55,7 +56,10 @@ for ASCII_Val in range(32, 127):
         # following format
         # "hash": "count"
         remappedASCII_Vals[newASCII_Val] = 1
-# print(sorted(hashes.keys()))
-min = 29124297227663
-max = 325620017749655509090396059873
-print(dict(sorted(remappedASCII_Vals.items(), key=lambda item: item[1])))
+
+print(sorted(remappedASCII_Vals.keys()))
+# print(sorted(len(str(remappedASCII_Vals.keys()))))
+
+# min = 29124297227663
+# max = 325620017749655509090396059873
+# print(dict(sorted(remappedASCII_Vals.items(), key=lambda item: item[1])))
