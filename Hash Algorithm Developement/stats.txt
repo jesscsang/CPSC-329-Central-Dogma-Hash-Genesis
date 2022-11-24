@@ -1,0 +1,4 @@
+Time Elapsed: 21660.5585421999 sec
+Number of Hashes Computed (Replicates): 526044
+Average Time Per Hash: 24.285800339596122 hashes/sec
+Time to Hash All 8 character Passwords: 1663201052086602.2 days
