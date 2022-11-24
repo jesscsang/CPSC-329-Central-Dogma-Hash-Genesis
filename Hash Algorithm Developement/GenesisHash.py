@@ -209,15 +209,35 @@ password = "lemon"
 # print(f'All 8 character passwords: {(end*95**3)/(60*60*24)} days')
 print(f'hash: {genesisHash(password)}\n')
 
+hashCounter = 0
+try:
+    startTime = perf_counter()
+    for c1 in (chr(i) for i in range(32, 127)):
+        for c2 in (chr(i) for i in range(32, 127)):
+            for c3 in (chr(i) for i in range(32, 127)):
+                for c4 in (chr(i) for i in range(32, 127)):
+                    for c5 in (chr(i) for i in range(32, 127)):
+                        for c6 in (chr(i) for i in range(32, 127)):
+                            for c7 in (chr(i) for i in range(32, 127)):
+                                for c8 in (chr(i) for i in range(32, 127)):
+                                    if hashCounter % 100000 == 0:
+                                        fname = 'bruteForce3CharPW_' + \
+                                            str(int(hashCounter/100000))+'.txt'
+                                    hashCounter += 1
+                                    with open(fname, 'a') as f:
+                                        password = c1+c2+c3+c4+c5+c6+c7+c8
+                                        f.write(
+                                            f'{password},{genesisHash(password)}\n')
+                                        print(
+                                            f'{password},{genesisHash(password)}\n')
 
-# counter = 0
-# for c1 in (chr(i) for i in range(32, 127)):
-#     for c2 in (chr(i) for i in range(32, 127)):
-#         for c3 in (chr(i) for i in range(32, 127)):
-#             if counter % 100000 == 0:
-#                 fname = 'bruteForce3CharPW_'+str(int(counter/100000))+'.txt'
-#             counter += 1
-#             with open(fname, 'a') as f:
-#                 password = c1+c2+c3
-#                 f.write(f'{password},{genesisHash(password)}\n')
-#                 print(f'{password},{genesisHash(password)}\n')
+except KeyboardInterrupt:
+    timeElapsed = perf_counter() - startTime
+    print(timeElapsed)
+    with open("stats.txt", 'a') as f:
+        f.write(f'Time Elapsed: {timeElapsed} sec\n')
+        f.write(f'Number of Hashes Computed (Replicates): {hashCounter}\n')
+        f.write(
+            f'Average Time Per Hash: {hashCounter/timeElapsed} hashes/sec\n')
+        f.write(
+            f'Time to Hash All 8 character Passwords: {(timeElapsed*95**8)/(60*60*24)} days')
