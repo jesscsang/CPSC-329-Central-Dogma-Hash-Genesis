@@ -221,7 +221,7 @@ try:
                             for c7 in (chr(i) for i in range(32, 127)):
                                 for c8 in (chr(i) for i in range(32, 127)):
                                     if hashCounter % 100000 == 0:
-                                        fname = 'bruteForce3CharPW_' + \
+                                        fname = 'bruteForce8CharPW_' + \
                                             str(int(hashCounter/100000))+'.txt'
                                     hashCounter += 1
                                     with open(fname, 'a') as f:
