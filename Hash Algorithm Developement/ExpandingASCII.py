@@ -44,20 +44,22 @@ remappedASCII_Vals = {}
 for ASCII_Val in range(32, 127):
 
     newASCII_Val = remappedASCII(ASCII_Val)
+
+    print(f'$``{chr(ASCII_Val)}"$ | ${ASCII_Val}$ | ${newASCII_Val}$')
     # newASCII_Val = len(str(remappedASCII(ASCII_Val)))
 
     # print(newASCII_Val)
 
-    if newASCII_Val in remappedASCII_Vals:
-        # Increment the count of an existing hash by 1
-        remappedASCII_Vals[newASCII_Val] += 1
-    else:
-        # Add the new hash to the dictionary with count 1 in the
-        # following format
-        # "hash": "count"
-        remappedASCII_Vals[newASCII_Val] = 1
+#     if newASCII_Val in remappedASCII_Vals:
+#         # Increment the count of an existing hash by 1
+#         remappedASCII_Vals[newASCII_Val] += 1
+#     else:
+#         # Add the new hash to the dictionary with count 1 in the
+#         # following format
+#         # "hash": "count"
+#         remappedASCII_Vals[newASCII_Val] = 1
 
-print(sorted(remappedASCII_Vals.keys()))
+# print(sorted(remappedASCII_Vals.keys()))
 # print(sorted(len(str(remappedASCII_Vals.keys()))))
 
 # min = 29124297227663

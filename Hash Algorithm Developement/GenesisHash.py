@@ -181,6 +181,7 @@ def desiredHashLength(_hash, hashLength=256):
     _hash = appendEvenOrOddIndices(str(_hash), "odd", hashLength*2*3)
     return _hash
 
+
 def stats():
     hashCounter = 0
     try:
@@ -213,7 +214,8 @@ def stats():
             f.write(
                 f'Average Time Per Hash: {hashCounter/timeElapsed} hashes/sec\n')
             f.write(
-                f'Time to Hash All 8 character Passwords: {(timeElapsed*95**8)/(60*60*24)} days')
+                f'Time to Hash All 8 character Passwords: {(hashCounter/timeElapsed*95**8)/(60*60*24)} days')
+
 
 def genesisHash(password):
     remappedASCII_PW = strToRemappedASCII(password)
@@ -234,7 +236,8 @@ def genesisHash(password):
     return AA
 
 
-password = "password"
-print(f'hash: {genesisHash(password)}\n')
+# password = "password"
+# print(f'hash: {genesisHash(password)}\n')
 
-
+print(f'hash: {genesisHash("The quick brown fox jumps over the lazy dog")}\n')
+print(f'hash: {genesisHash("The quick brown fox jumps over the lazy dog.")}\n')
